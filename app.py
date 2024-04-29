@@ -120,7 +120,7 @@ async def ingestDocs(request: ingestRequest, api_key: str = Security(get_api_key
     es_model_text_field = request.es_model_text_field
     es_index_text_field = request.es_index_text_field
     # TODO: Metadata to add to nodes, could be anything from the user, maybe a list?
-    metadata_fields     = request.metadata_fields
+    #metadata_fields     = request.metadata_fields
 
     # try: 
     cos_reader = CloudObjectStorageReader(
