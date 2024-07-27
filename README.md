@@ -9,7 +9,7 @@ To install this project locally, follow these steps:
 1. **Clone the repository**
 
 
-2. **Navigate to the project directory:**
+2. **Navigate to the repo directory:**
 
     ```bash
     cd <your-project>
