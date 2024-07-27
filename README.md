@@ -12,7 +12,7 @@ To install this project locally, follow these steps:
 2. **Navigate to the application subdirectory:**
 
     ```bash
-    cd <your-repo-clone>/application
+    cd <your-repo-clone>
     ```
 
 3. **Create the Enviroment, Activate it, and Install Requirements:**
