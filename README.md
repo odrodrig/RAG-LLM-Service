@@ -9,10 +9,10 @@ To install this project locally, follow these steps:
 1. **Clone the repository**
 
 
-2. **Navigate to the repo directory:**
+2. **Navigate to the application subdirectory:**
 
     ```bash
-    cd <your-project>
+    cd <your-repo-clone>/application
     ```
 
 3. **Create the Enviroment, Activate it, and Install Requirements:**
