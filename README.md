@@ -13,7 +13,7 @@ To run application on your local machine, follow these steps:
 1. Navigate to the project directory:
 
     ```bash
-    cd RAG-LLM-App/application
+    cd RAG-LLM-Service/application
     ```
 
 3. Create a Python Enviroment, Activate it, and Install Requirements:
