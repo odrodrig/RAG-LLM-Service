@@ -7,7 +7,14 @@
     },
     "servers": [
       {
-        "url": ""
+        "url": "https://{llm_route}",
+        "description": "The Route to the application hosting the queryllm application",
+        "variables": {
+          "llm_route": {
+            "default": "https://rag-llm-app.********.ca-tor.codeengine.appdomain.cloud/",
+            "description": "The portion of the Route URL that follows https://"
+          }
+        }
       }
     ],
     "paths": {
@@ -246,7 +253,7 @@
             "es_model_name": {
               "type": "string",
               "title": "Es Model Name",
-              "default": ".elser_model_1"
+              "default": ".elser_model_2_linux-x86_64"
             },
             "num_results": {
               "type": "string",
