@@ -1,6 +1,6 @@
 variable "project_name" {
   type    = string
-  default = "rag-llm"
+  default = "rag-llm-service"
   description = "Name of Code Engine project"
 }
 
