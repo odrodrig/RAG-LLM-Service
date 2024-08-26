@@ -10,7 +10,7 @@ IBM_CLOUD_API_KEY=""
 COS_IBM_CLOUD_API_KEY=""
 COS_INSTANCE_ID=""
 # Retrieve the public endpoint in your region from the Configuration tab on your bucket.  Also make sure you have enabled your bucket to be public under the Permissions tab
-# It should be something like https://s3.dal.us.cloud-object-storage.appdomain.cloud
+# It should be something like https://s3.us-south.cloud-object-storage.appdomain.cloud
 COS_ENDPOINT_URL=""
 
 # Watsonx.ai - used by searchLLM
