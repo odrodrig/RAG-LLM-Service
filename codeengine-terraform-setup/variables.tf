@@ -13,7 +13,7 @@ variable "resource_group" {
 variable "source_url" {
   type    = string
   default = ""
-  description = "Git repo name"
+  description = "HTTPS or SSH git repo name. I.e. https://github.com/ibm-build-lab/RAG-LLM-Service.git or git@github.com:ibm-build-lab/RAG-LLM-Service.git"
 }
 
 variable "source_revision" {
