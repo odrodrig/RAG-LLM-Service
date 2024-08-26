@@ -108,8 +108,8 @@ variable "wxd_password" {
 
 variable "wxd_url" {
   type        = string
-  description = "watsonx Discovery URL"
-  default = ""
+  description = "watsonx Discovery URL with port"
+  default = "https://******************.************.databases.appdomain.cloud:<port>"
 }
 
 variable "wd_api_key" {
