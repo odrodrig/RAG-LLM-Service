@@ -96,8 +96,8 @@ variable "wx_url" {
 
 variable "wxd_username" {
   type        = string
-  description = "watsonx discovery user"
-  default = ""
+  description = "watsonx Discovery user"
+  default = "admin"
 }
 
 variable "wxd_password" {
@@ -108,19 +108,19 @@ variable "wxd_password" {
 
 variable "wxd_url" {
   type        = string
-  description = "watsonx discovery URL"
+  description = "watsonx Discovery URL"
   default = ""
 }
 
 variable "wd_api_key" {
   type        = string
-  description = "watson discovery apikey"
+  description = "Watson Discovery apikey"
   default = "************"
 }
 
 variable "wd_url" {
   type        = string
-  description = "watson discovery URL"
+  description = "Watson Discovery URL"
   default = "https://<url>"
 }
 
