@@ -12,8 +12,8 @@ variable "resource_group" {
 
 variable "source_url" {
   type    = string
-  default = ""
-  description = "HTTPS git repo name. I.e. https://github.com/ibm-build-lab/RAG-LLM-Service.git"
+  default = "https://github.com/ibm-build-lab/RAG-LLM-Service.git"
+  description = "Git repo name"
 }
 
 variable "source_revision" {
