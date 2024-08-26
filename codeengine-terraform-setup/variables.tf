@@ -90,8 +90,8 @@ variable "wx_project_id" {
 
 variable "wx_url" {
   type        = string
-  description = "watsonx URL with port number"
-  default = ""
+  description = "watsonx URL"
+  default = "https://us-south.ml.cloud.ibm.com"
 }
 
 variable "wxd_username" {
