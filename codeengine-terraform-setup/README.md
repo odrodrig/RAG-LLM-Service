@@ -35,7 +35,7 @@ Run `Apply Plan`
 - Change the **Ephemeral storage** to 2.04
 - Limit the instance scaling to 1 and 1
 - Select **Domain mappings** to **Public**.
-- Under the **Optional settings**->**Environment variables**, create the variables with the credentials based on the env file
+- Under the **Optional settings**->**Environment variables**, create the variables with the credentials based on the `env` file located in the `application` directory
 - Under **Optional settings**->**Image start options** change the **Listening port** to 4050
 - click **Create**
 
