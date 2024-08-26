@@ -13,8 +13,8 @@ In `cloud.ibm.com`, search on **Schematics**.  Click on **Create a workspace**
 ### Step 2 
 
 Set the following:
-- **GitHub, GitLab or Bitbucket repository URL**: `https://github.com/<org>/RAG-LLM-Service`
-- **Branch**: `main`
+- **GitHub, GitLab or Bitbucket repository URL**: `https://github.com/ibm-build-lab/RAG-LLM-Service`
+- **Branch**: `rework-doc-update`
 - **Folder**: `codeengine-terraform-setup` 
 
 Click **Create**
