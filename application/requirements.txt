@@ -20,7 +20,7 @@ llama-index-vector-stores-elasticsearch==0.1.7
 llama-parse==0.4.2
 llamaindex-py-client==0.1.19
 elasticsearch==8.13.0
-pydantic==2.7.1
+pydantic==2.7.4
 ibm-cos-sdk
 docx2txt
 ibm_cloud_sdk_core
