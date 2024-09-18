@@ -29,9 +29,9 @@ Run `Apply Plan`
 **Optional**: If the build times out before the Application is created, the application can be created manually within Code Engine. To do so: 
 
 - Search **Code Engine** in the top search bar on the IBM Cloud console.
-- Once in **Code Engine**, open **Projects**. See if there is an application created. If not, create one. Navigate to the **Applications** tab within **Code Engine** on the left side and click **Create**.
+- Once in **Code Engine**, open **Projects**, and go into your project. Navigate to the **Applications** tab within **Code Engine** on the left side. See if there is an application created. If not, click **Create** and follow next steps.
 - Provide a name for the Application, i.e. rag-llm-app
-- Choose **Use an existing container image**. For **Image reference** enter the image name created from the terraform automation, i.e. us.icr.io/<cr_namespace>/<ce_imagename>:latest
+- Choose **Use an existing container image**. For **Image reference** enter the image name created from the terraform automation, i.e. `us.icr.io/<cr_namespace>/<ce_imagename>:latest`
 - Change the **Ephemeral storage** to 2.04
 - Limit the instance scaling to 1 and 1
 - Select **Domain mappings** to **Public**.
