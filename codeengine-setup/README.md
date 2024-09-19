@@ -67,8 +67,8 @@ To deploy using Terraform, see [Deploy the RAG LLM Application to Code Engine](.
 
     Under **Output** tab
     - Enter `us.icr.io` for the **Registry server**
-    - Set **Registry secret** to the **Registry secret** created in step 4 above
-    - Set **Namespace** to the container registry namespace you created in setp 2 above
+    - Set **Registry secret** to the **Registry secret** created in step 5 above
+    - Set **Namespace** to the container registry namespace you created in step 3 above
     - Select **Done**
 
     Once the **Configuration** is set up, in the **Build runs** pane select **Create**, then **Submit build**
