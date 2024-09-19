@@ -144,7 +144,7 @@ The `queryLLM` API queries a connected Elasticsearch database then sends the ret
     ```
     All other values have defaults, you can adjust the other parameters to improve your results.
 
-    NOTE: The `filters` tag allows you to narrow down which documents to search on. You can specify from fields available within the document metadata.
+    NOTE: The `filters` tag allows you to narrow down which documents to search on. You can specify from fields available within the document metadata. Remove this element if you don't want to filter on metadata.
    
 #### queryWDLLM
 
