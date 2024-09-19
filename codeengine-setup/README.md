@@ -6,7 +6,7 @@
 
 To deploy using Terraform, see [Deploy the RAG LLM Application to Code Engine](.terraform/README.md)
 
-## Manual method (if your application code resides in a Github Enterprise repository)
+## Manual method (if your application code resides in a private Github repository)
 
 1. Log into [IBM Cloud](cloud.ibm.com)
 
