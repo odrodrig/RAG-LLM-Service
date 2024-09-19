@@ -1,6 +1,6 @@
 # Deploy the Application to Code Engine
 
-**NOTE:** Before deploying ensure that you have space in the designated container registry. These steps assume images will be stored in `us.icr.io`. To determine this, go to [https://cloud.ibm.com/containers/registry/images](https://cloud.ibm.com/containers/registry/images), choose **Settings** from lefthand menu, select the region from the drop down menu, in this case choose `Dallas`. This will show you the remaining space.  You may need to upgrade to the paid plan if planning to develop this application and save more than one image. See [Container Registry Overview](https://cloud.ibm.com/docs/Registry?topic=Registry-registry_overview) for more details.
+**NOTE:** Before deploying, ensure you have space in the designated container registry. These steps assume images will be stored in `us.icr.io`. To determine this, go to [https://cloud.ibm.com/containers/registry/images](https://cloud.ibm.com/containers/registry/images), choose **Settings** from lefthand menu, select the region from the drop-down menu, in this case choose `Dallas`. This will show you the remaining space.  You may need to upgrade to the paid plan if planning to develop this application and save more than one image. See [Container Registry Overview](https://cloud.ibm.com/docs/Registry?topic=Registry-registry_overview) for more details.
 
 ## Using Terraform Scripts (only if code resides in public github.com repository)
 
@@ -44,7 +44,7 @@ To deploy using Terraform, see [Deploy the RAG LLM Application to Code Engine](.
     - Select **Create**
     - Select **SSH secret**, then **Next**
     - Enter a secret name, like `my-ssh`
-    - Enter the contents of your SSH **private** key, generated on your local machine using the `ssh keygen -t rsa` command. Note you have to have created an SSH key on your [github.ibm.com](github.ibm.com) (or other GHE respositiory) user (go into **Settings** -> **SSH and GPG Keys** on your github user profile. Add a new SSH key with your `id_rsa.pub` contents)
+    - Enter the contents of your SSH **private** key, generated on your local machine using the `ssh keygen -t rsa` command. Note you have to have created an SSH key on your [github.ibm.com](github.ibm.com) (or other GHE repository) user (go into **Settings** -> **SSH and GPG Keys** on your github user profile. Add a new SSH key with your `id_rsa.pub` contents)
     - Select **Create**
 
 5. Create an image build
@@ -52,15 +52,15 @@ To deploy using Terraform, see [Deploy the RAG LLM Application to Code Engine](.
     From the Code Engine Project window, select **Image builds**, then go into the **Image build** tab, click build **Create** button
     
     Under the **Source** tab:
-    - Name your build (something like `sequifi-app`
-    - For **Code repo URL** use the SSH repo format i.e. `git@github.ibm.com:<org>/Sequifi-LLM-Service.git`
-    - Choose the SSH secret you creatd in step 4 above
+    - Name your build (something like `rag-app`
+    - For **Code repo URL** use the SSH repo format i.e. `git@github.ibm.com:<org>/RAG-LLM-Service.git`
+    - Choose the SSH secret you created in step 4 above
     - Choose the branch name, i.e. `main`
-    - Choose the subdirectory where the `Dockerfile` resides if not in top level repo directory
+    - Choose the subdirectory where the `Dockerfile` resides if not in top-level repo directory
     - Select **Next**
 
     Under the **Strategy** tab:
-    - Choose name of Dockerfile
+    - Choose name of **Dockerfile**
     - Choose timeout value (we used 15m)
     - Choose Build resources (we used XL)
     - Select **Next**
@@ -77,8 +77,8 @@ To deploy using Terraform, see [Deploy the RAG LLM Application to Code Engine](.
 
     Navigate to the **Applications** tab within **Code Engine** on the left side and click **Create**.
 
-    - Provide a name for the Application, i.e. `sequifi-app`
-    - Choose **Use an existing container image**, and enter the image name created in step 5 for **Image reference**, i.e. `us.icr.io/<cr_namespace>/sequifi-app:latest`
+    - Provide a name for the Application, i.e. `rag-app`
+    - Choose **Use an existing container image**, and enter the image name created in step 5 for **Image reference**, i.e. `us.icr.io/<cr_namespace>/rag-app:latest`
     - Change the Ephemeral storage to 2.04
     - Limit the instance scaling to 1 and 1
     - Select **Domain mappings** to **Public**.
@@ -88,11 +88,11 @@ To deploy using Terraform, see [Deploy the RAG LLM Application to Code Engine](.
 
 ### If code resides in public github and you want to manually deploy
 
-Use steps above, but leave out the steps to create the SSH key secret and use the normal repository syntax, i.e. `https://github.com/<org>>/<repo>`
+Use the steps above, but leave out the steps to create the SSH key secret and use the normal repository syntax, i.e. `https://github.com/<org>>/<repo>`
 
 ## Accessing the URL on Code Engine
 
-Wait for the build to complete. To access the URL go into the **Applications** page within the Code Engine Project, and click the **OpenURL** link next to the newly deployed `sequifi-app` application
+Wait for the build to complete. To access the URL go into the **Applications** page within the Code Engine Project, and click the **OpenURL** link next to the newly deployed `rag-app` application
 
-A quick sanity check with `<url>/docs` will take you to the swagger ui. To try the APIs from swagger, you will need to click the **Authorize** button at the topand add the value you set for RAG-APP-API-KEY in the environment variables
+A quick sanity check with `<url>/docs` will take you to the swagger ui. To try the APIs from swagger, you will need to click the **Authorize** button at the top and add the value you set for RAG-APP-API-KEY in the environment variables
 
