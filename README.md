@@ -45,7 +45,7 @@ To run application on your local machine, follow these steps:
 
 ### Deploying onto Code Engine
 
-You can deploy this application onto [IBM Cloud Code Engine](https://cloud.ibm.com/docs/codeengine?topic=codeengine-getting-started) using Terraform scripts. See the steps [here.](./codeengine-terraform-setup/README.md)
+You can deploy this application onto [IBM Cloud Code Engine](https://cloud.ibm.com/docs/codeengine?topic=codeengine-getting-started) using Terraform scripts. See the steps [here.](./codeengine-setup/README.md)
 
 ### Deploying onto OpenShift
 
