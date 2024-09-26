@@ -217,7 +217,7 @@ curl --location '<application url>/queryLLM' \
 
 ## Connecting this application to watsonx Assistant
 
-You can connect watsonx Assistant to invoke the `queryLLM` or `queryWDLLM` APIs. See the steps [here.](./watsonx-assistant-setup/README.md)
+You can connect **watsonx Assistant** to invoke the `queryLLM` or `queryWDLLM` APIs. See the steps [here.](./watsonx-assistant-setup/README.md)
 
 ## Troubleshooting
 
