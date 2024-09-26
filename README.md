@@ -218,3 +218,8 @@ curl --location '<application url>/queryLLM' \
 ## Connecting this application to watsonx Assistant
 
 You can connect watsonx Assistant to invoke the `queryLLM` or `queryWDLLM` APIs. See the steps [here.](./watsonx-assistant-setup/README.md)
+
+## Troubleshooting
+
+- One of the classes used in this utility defines a default model to be used in the event that the model isn't specified by the api call.  This code is located
+at [https://github.com/ibm-build-lab/RAG-LLM-Service/blob/main/application/utils.py:299](https://github.com/ibm-build-lab/RAG-LLM-Service/blob/main/application/utils.py:299).  If the model defined here is deprecated from watsonx.ai, these apis will break.  So ensure that the model defined in the `CustomWatsonX(WatsonX)` is available within the watsonx.ai framework.
