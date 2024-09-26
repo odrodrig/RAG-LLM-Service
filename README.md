@@ -221,5 +221,5 @@ You can connect **watsonx Assistant** to invoke the `queryLLM` or `queryWDLLM` A
 
 ## Troubleshooting
 
-- The `CustomWatsonX()` wrapper class used in this utility defines a default model to be used in the event that the model isn't specified in the api call.  This code is located
+- The `CustomWatsonX()` wrapper class used in this utility defines a default model to be used in the event that a model id isn't specified in the api call.  This code is located
 at [https://github.com/ibm-build-lab/RAG-LLM-Service/blob/main/application/utils.py:299](https://github.com/ibm-build-lab/RAG-LLM-Service/blob/main/application/utils.py:299). Ensure that the model defined in this class is available within the watsonx.ai framework. If the model defined here is deprecated from watsonx.ai, these apis will break. 
