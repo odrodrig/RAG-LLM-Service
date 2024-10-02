@@ -4,7 +4,7 @@
 
 ## Using Terraform Scripts (only if code resides in public github.com repository)
 
-To deploy using Terraform, see [Deploy the RAG LLM Application to Code Engine](.terraform/README.md)
+To deploy using Terraform, see [Deploy the RAG LLM Application to Code Engine](./terraform/README.md)
 
 ## Manual method (if your application code resides in a private Github repository)
 
