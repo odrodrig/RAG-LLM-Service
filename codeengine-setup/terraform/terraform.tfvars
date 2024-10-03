@@ -28,4 +28,4 @@ wd_url = "https://<url>"
 rag_app_api_key = "" # custom key/password you create as a key to pass along to the header for the RAG app (for basic security).
 ce_project_name = "" # Can be new or existing Code Engine project
 source_revision = "" # Git repo branch to pull source from
-source_url = "https://github.com/<your_org>/RAG-LLM-App/application"    # update <your_org>
+source_url = "https://github.com/ibm-build-lab/RAG-LLM-Service.git"    # update <your_org>
