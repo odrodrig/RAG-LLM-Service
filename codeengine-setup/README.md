@@ -53,7 +53,7 @@ To deploy using Terraform, see [Deploy the RAG LLM Application to Code Engine](.
     From the Code Engine Project window, select **Image builds**, then go into the **Image build** tab, click build **Create** button
     
     Under the **Source** tab:
-    - Name your build (something like `rag-app`
+    - Name your build (something like `rag-app`)
     - For **Code repo URL** use the SSH repo format i.e. `git@github.ibm.com:<org>/RAG-LLM-Service.git`
     - Choose the SSH secret you created in step 4 above
     - Choose the branch name, i.e. `main`
