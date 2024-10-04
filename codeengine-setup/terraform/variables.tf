@@ -31,7 +31,7 @@ variable "source_context_dir" {
 
 variable "cr_namespace" {
   type    = string
-  default = "rag-llm-app-images"
+  default = ""
   description = "Container Registry namespace"
 }
 
@@ -43,7 +43,7 @@ variable "cr_imagename" {
 
 variable "ce_project_name" {
   type    = string
-  default = "rag-llm-app"
+  default = ""
   description = "Name of Code Engine project"
 }
 
