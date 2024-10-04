@@ -41,7 +41,7 @@ data "external" "project_search" {
 resource "ibm_code_engine_project" "code_engine_project_instance" {
   depends_on = [ data.external.project_search ]
   count             = data.external.project_search.result.exists == "false" ? 1 : 0
-  name              = local.project_name
+  name              = "${local.project_name}"
   resource_group_id = data.ibm_resource_group.group.id
 }
 
