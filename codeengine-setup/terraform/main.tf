@@ -46,19 +46,26 @@ resource "ibm_code_engine_project" "code_engine_project_instance" {
 }
 
 # Grab a list of namespaces in the RG
-data "ibm_cr_namespaces" "get_rg_namespace" {}
+# data "ibm_cr_namespaces" "get_rg_namespace" {}
 
-# Determine if a cr_namespace exists, if it does, use it, otherwise create it.
-locals {
-  existing_namespace = [for ns in data.ibm_cr_namespaces.get_rg_namespace.namespaces : ns if ns.name == "${var.cr_namespace}"]
-  namespace_exists = length(local.existing_namespace) > 0
+# # Determine if a cr_namespace exists, if it does, use it, otherwise create it.
+# locals {
+#   existing_namespace = [for ns in data.ibm_cr_namespaces.get_rg_namespace.namespaces : ns if ns.name == "${var.cr_namespace}"]
+#   namespace_exists = length(local.existing_namespace) > 0
+# }
+
+resource "random_string" "suffix" {
+  length  = 8
+  special = false
+  upper   = false
 }
 
 # Create a cr_namespace
 resource "ibm_cr_namespace" "rg_namespace" {
-  depends_on = [ data.ibm_cr_namespaces.get_rg_namespace ]
-  count             = local.namespace_exists ? 0 : 1
-  name              = "${var.cr_namespace}"
+#  depends_on = [ data.ibm_cr_namespaces.get_rg_namespace ]
+#  count             = local.namespace_exists ? 0 : 1
+#  name              = "${var.cr_namespace}"
+  name              = "${var.cr_namespace}-${random_string.suffix.result}"
   resource_group_id = data.ibm_resource_group.group.id
 }
 
@@ -79,7 +86,7 @@ resource "ibm_code_engine_secret" "code_engine_secret_instance" {
 resource "ibm_code_engine_build" "code_engine_build_instance" {
   project_id    = local.project_id
   name          = "${var.ce_buildname}"
-  output_image  = "${local.container_registry}/${local.cr_namespace}/${local.imagename}"
+  output_image  = "${local.container_registry}/${ibm_cr_namespace.rg_namespace.name}/${local.imagename}"
   output_secret = ibm_code_engine_secret.code_engine_secret_instance.name
   source_url    = "${var.source_url}"
   source_revision = "${var.source_revision}"
