@@ -31,7 +31,7 @@ variable "source_context_dir" {
 
 variable "cr_namespace" {
   type    = string
-  default = ""
+  default = "rag-llm-app-images"
   description = "Container Registry namespace"
 }
 
