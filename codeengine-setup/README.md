@@ -20,6 +20,7 @@ To deploy using Terraform, see [Deploy the RAG LLM Application to Code Engine](.
     ```
     ibmcloud cr namespace-add <cr namespace>
     ```
+    This must be unique globally, so choose something like <company-name>-rag-app-images.  The name needs to be between 4 and 30 characters.
     
 3. Navigate to **Code Engine**
 
