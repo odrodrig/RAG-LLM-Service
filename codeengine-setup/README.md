@@ -48,51 +48,43 @@ To deploy using Terraform, see [Deploy the RAG LLM Application to Code Engine](.
     - Enter the contents of your SSH **private** key, generated on your local machine using the `ssh keygen -t rsa` command. Note you have to have created an SSH key on your [github.ibm.com](github.ibm.com) (or other GHE repository) user (go into **Settings** -> **SSH and GPG Keys** on your github user profile. Add a new SSH key with your `id_rsa.pub` contents)
     - Select **Create**
 
-1. Create an image build
-    
-    From the Code Engine Project window, select **Image builds**, then go into the **Image build** tab, click build **Create** button
-    
-    Under the **Source** tab:
-    - Name your build (something like `rag-app`)
-    - For **Code repo URL** use the SSH repo format i.e. `git@github.ibm.com:<org>/RAG-LLM-Service.git` if private, and `https://github.com/<org>/RAG-LLM-Service` if public
-    - If repo is private, choose the SSH secret you created in step above, choose "None" if public
-    - Choose the branch name, i.e. `main`
-    - For Context directory, add `application`
-    - Select **Next**
-
-    Under the **Strategy** tab:
-    - Choose name of **Dockerfile**
-    - Choose timeout value (we used 15m)
-    - Choose Build resources (we used XL)
-    - Select **Next**
-
-    Under **Output** tab
-    - Enter `us.icr.io` for the **Registry server**
-    - Set **Registry secret** to the **Registry secret** created in step above
-    - Set **Namespace** to the container registry namespace you created in step 3 above
-    - Add a name for **Repository** like `rag-llm-app`
-    - Optional, add a Tag like `latest`
-    - Select **Done**
-
-    Once the **Configuration** is set up, in the **Build runs** pane select **Create**, then **Submit build**
-
 1. Create an Application
 
     Navigate to the **Applications** tab within **Code Engine** on the left side and click **Create**.
 
     - Provide a name for the Application, i.e. `rag-app`
-    - Choose **Use an existing container image**, and enter the image name created in Image Build step for **Image reference**, i.e. `us.icr.io/<cr_namespace>/rag-app:latest`
-    - Change the Ephemeral storage to 2.04
-    - Limit the instance scaling to 1 and 1
+    - Choose **Build container image from source code**
+    - Choose **Specify build details**
+    - Under the **Source** tab:
+        - **Name**: something like `rag-app`
+        - **Code repo URL**:
+            - if repo is private, use the SSH repo format i.e. `git@github.ibm.com:<org>/RAG-LLM-Service.git`
+            - if repo is public, use HTTPS repo format, i.e. `https://github.com/<org>/RAG-LLM-Service`
+        - **SSH Secret**
+            - if repo is private, choose the SSH secret you created in step above,
+            - if repo is public, choose "None"
+        - **Branch name**: the branch that contains the source code, usually `main`
+        - **Context directory**: add `application`
+        - Select **Next**
+    - Under the **Strategy** tab:
+        - Choose name of **Dockerfile**
+        - Choose timeout value (we used 15m)
+        - Choose Build resources (we used XL)
+        - Select **Next**
+    - Under **Output** tab
+        - Enter `us.icr.io` for the **Registry server**
+        - Set **Registry secret** to the **Registry secret** created in step above
+        - Set **Namespace** to the container registry namespace you created in step 3 above
+        - Add a name for **Repository** like `rag-llm-app`
+        - Optional, add a Tag like `latest`
+        - Select **Done**
+    - Change the **Ephemeral storage** to 2.04
+    - Limit the Autonscaling to 1 and 1
     - Select **Domain mappings** to **Public**.
     - Under the **Optional settings**, **Environment variables**, create the variables with the credentials based on the [env](../application/env) file
     - Under **Optional settings**, **Image start options** change the **Listening port** to 4050
     - Finally click **Create**
-
-### If code resides in public github and you want to manually deploy
-
-Use the steps above, but leave out the steps to create the SSH key secret and use the normal repository syntax, i.e. `https://github.com/<org>>/<repo>`
-
+  
 ## Accessing the URL on Code Engine
 
 Wait for the build to complete. To access the URL go into the **Applications** page within the Code Engine Project, and click the **OpenURL** link next to the newly deployed `rag-app` application
