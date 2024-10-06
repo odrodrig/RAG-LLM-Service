@@ -76,7 +76,7 @@ To deploy using Terraform, see [Deploy the RAG LLM Application to Code Engine](.
 
     Once the **Configuration** is set up, in the **Build runs** pane select **Create**, then **Submit build**
 
-6. Create an Application
+1. Create an Application
 
     Navigate to the **Applications** tab within **Code Engine** on the left side and click **Create**.
 
@@ -85,7 +85,7 @@ To deploy using Terraform, see [Deploy the RAG LLM Application to Code Engine](.
     - Change the Ephemeral storage to 2.04
     - Limit the instance scaling to 1 and 1
     - Select **Domain mappings** to **Public**.
-    - Under the **Optional settings**, **Environment variables**, create the variables with the credentials based on the `terraform/terraform.tfvars` file
+    - Under the **Optional settings**, **Environment variables**, create the variables with the credentials based on the [env](../application/env) file
     - Under **Optional settings**, **Image start options** change the **Listening port** to 4050
     - Finally click **Create**
 
