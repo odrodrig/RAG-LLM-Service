@@ -18,11 +18,11 @@ WX_URL="https://us-south.ml.cloud.ibm.com"
 # To find the watsonx.ai project, go into watsonx.ai GUI (https://dataplatform.cloud.ibm.com/wx/home), look under Projects, open the project, go to Manage->General tab. You will see the project ID.
 WX_PROJECT_ID=""
 
-# Elasticsearch connection, used by searchLLM
+# Elasticsearch connection, only needed if using searchLLM api
 WXD_URL="<url>:<port>"
 WXD_USERNAME=""
 WXD_PASSWORD=""
 
-# Watson Discovery connection, used by searchWDLLM
+# Watson Discovery connection, only needed if using searchWDLLM api
 WD_API_KEY=""
 WD_URL=""
