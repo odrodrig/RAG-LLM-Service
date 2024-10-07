@@ -1,6 +1,6 @@
 # Random project suffix
 resource "random_string" "suffix" {
-  length  = 8
+  length  = 6
   special = false
   upper   = false
 }
@@ -8,7 +8,7 @@ resource "random_string" "suffix" {
 locals {
   project_name = "${var.ce_project_name}"
   resource_group = "${var.resource_group}-${random_string.suffix.result}"
-  cr_namespace = "${var.cr_namespace}"
+  cr_namespace = "${var.cr_namespace}-${random_string.suffix.result}"
   secret = "${var.ce_buildsecret}"
   container_registry = "us.icr.io"
   imagename = "${var.cr_imagename}"
@@ -46,19 +46,19 @@ resource "ibm_code_engine_project" "code_engine_project_instance" {
 }
 
 # Grab a list of namespaces in the RG
-data "ibm_cr_namespaces" "get_rg_namespace" {}
+# data "ibm_cr_namespaces" "get_rg_namespace" {}
 
-# Determine if a cr_namespace exists, if it does, use it, otherwise create it.
-locals {
-  existing_namespace = [for ns in data.ibm_cr_namespaces.get_rg_namespace.namespaces : ns if ns.name == "${var.cr_namespace}"]
-  namespace_exists = length(local.existing_namespace) > 0
-}
+# # Determine if a cr_namespace exists, if it does, use it, otherwise create it.
+# locals {
+#   existing_namespace = [for ns in data.ibm_cr_namespaces.get_rg_namespace.namespaces : ns if ns.name == "${var.cr_namespace}"]
+#   namespace_exists = length(local.existing_namespace) > 0
+# }
 
 # Create a cr_namespace
 resource "ibm_cr_namespace" "rg_namespace" {
-  depends_on = [ data.ibm_cr_namespaces.get_rg_namespace ]
-  count             = local.namespace_exists ? 0 : 1
-  name              = "${var.cr_namespace}"
+#  depends_on = [ data.ibm_cr_namespaces.get_rg_namespace ]
+#  count             = local.namespace_exists ? 0 : 1
+  name              = "${local.cr_namespace}"
   resource_group_id = data.ibm_resource_group.group.id
 }
 

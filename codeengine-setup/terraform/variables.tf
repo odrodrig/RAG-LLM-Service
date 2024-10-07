@@ -32,7 +32,7 @@ variable "source_context_dir" {
 variable "cr_namespace" {
   type    = string
   default = ""
-  description = "Container Registry namespace"
+  description = "Container Registry namespace. Must be between 4 and 24 characters"
 }
 
 variable "cr_imagename" {
