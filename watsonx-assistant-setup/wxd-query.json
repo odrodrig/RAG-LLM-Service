@@ -1,0 +1,1 @@
+{"query":{"text_expansion":{"ml.sparse_embedding":{"model_id":".elser_model_2_linux-x86_64","model_text":"$QUERY"}}}}
