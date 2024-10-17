@@ -11,7 +11,7 @@
         "description": "The Route to the application hosting the queryllm application",
         "variables": {
           "llm_route": {
-            "default": "rag-llm-app.<unique string>.<region>.codeengine.appdomain.cloud/",
+            "default": "<app name>.<unique string>.<region>.codeengine.appdomain.cloud/",
             "description": "The portion of the Route URL that follows https://"
           }
         }
