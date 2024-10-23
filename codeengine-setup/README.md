@@ -8,7 +8,7 @@ To deploy using Terraform, see [Deploy the RAG LLM Application to Code Engine us
 
 ## Manual method
 
-to deploy manually, see [Deploy the RAG LLM Application into Code Engine step by step](./manual-setup.md)
+To deploy manually, see [Deploy the RAG LLM Application into Code Engine step by step](./manual-setup.md)
   
 ## Accessing the URL on Code Engine
 
