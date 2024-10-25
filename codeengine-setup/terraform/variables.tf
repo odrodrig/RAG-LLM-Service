@@ -80,7 +80,7 @@ variable "cos_instance_id" {
 variable "cos_endpoint_url" {
   type        = string
   description = "COS endpoint. Open bucket, go into Configuration tab, public endpoint, make sure to add the https://<URL>"
-  default = ""
+  default = "https://s3.us-east.cloud-object-storage.appdomain.cloud"
 }
 
 variable "rag_app_api_key" {
