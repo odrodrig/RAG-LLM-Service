@@ -104,7 +104,7 @@ variable "wx_url" {
 variable "wxd_username" {
   type        = string
   description = "Elasticsearch user"
-  default = "admin"
+  default = ""
 }
 
 variable "wxd_password" {
