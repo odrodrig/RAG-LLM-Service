@@ -3,6 +3,8 @@ import os
 import uvicorn
 import sys
 import time
+from typing import List, Dict
+
 
 from utils import CloudObjectStorageReader, CustomWatsonX, create_sparse_vector_query_with_model, create_sparse_vector_query_with_model_and_filter
 from dotenv import load_dotenv
@@ -316,18 +318,39 @@ async def queryLLM(request: queryLLMRequest, api_key: str = Security(get_api_key
     # Finally query the engine with the user question
     response = query_engine.query(user_query)
     print(response)
+    referenceData = [node.to_dict() for node in response.source_nodes]
+    references = extract_urls_or_filenames(referenceData)
+    print("References: ")
+    print(references)
+
     data_response = {
         "llm_response": response.response,
-        "references": [node.to_dict() for node in response.source_nodes]
+        #"references": [node.to_dict() for node in response.source_nodes]
+        "references": references
     }
 
     return queryLLMResponse(**data_response)
 
-    # except Exception as e:
-    #     return queryLLMResponse(
-    #         llm_response = "",
-    #         references=[{"error": repr(e)}]
-    #     )
+def extract_urls_or_filenames(data) -> List[str]:
+
+    result = []
+
+    for item in data:
+        node = item.get("node", {})
+        
+        # Check for URL at node level first, then in metadata
+        url = node.get("url") or node.get("metadata", {}).get("url")
+        
+        # Check for file_path at node level first, then in metadata
+        file_name = node.get("file_name") or node.get("metadata", {}).get("file_name")
+        
+        # Append URL if it exists; otherwise, append the base filename from file_name if available
+        if url:
+            result.append(url)
+        elif file_name:
+            result.append(file_name)
+
+    return result
 
 def get_custom_watsonx(model_id, additional_kwargs):
     # Serialize additional_kwargs to a JSON string, with sorted keys
