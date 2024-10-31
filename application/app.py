@@ -318,20 +318,21 @@ async def queryLLM(request: queryLLMRequest, api_key: str = Security(get_api_key
     # Finally query the engine with the user question
     response = query_engine.query(user_query)
     print(response)
-    referenceData = [node.to_dict() for node in response.source_nodes]
-    references = extract_urls_or_filenames(referenceData)
+    reference_data = [node.to_dict() for node in response.source_nodes]
+    # Cull the list of references, return info for wxa carousel
+    ref_list = extract_urls_or_filenames(reference_data)
     print("References: ")
-    print(references)
+    print(ref_list)
 
     data_response = {
         "llm_response": response.response,
-        #"references": [node.to_dict() for node in response.source_nodes]
-        "references": references
+        "references": reference_data,
+        "ref_list": ref_list
     }
 
     return queryLLMResponse(**data_response)
 
-def extract_urls_or_filenames(data) -> List[str]:
+def extract_urls_or_filenames(data):
 
     result = []
 
@@ -344,11 +345,25 @@ def extract_urls_or_filenames(data) -> List[str]:
         # Check for file_path at node level first, then in metadata
         file_name = node.get("file_name") or node.get("metadata", {}).get("file_name")
         
-        # Append URL if it exists; otherwise, append the base filename from file_name if available
+        # Check for label at node level first, then in metadata
+        label = node.get("label") or node.get("metadata", {}).get("label")
+
+        # Extract 100-character snippet from the text field
+        text = node.get("text", "")
+        snippet = ' '.join(text.split()[:20]) + "..."  # Get the first 20 words
+
+        # Append URL if it exists; otherwise, append the file_name if available
         if url:
-            result.append(url)
-        elif file_name:
-            result.append(file_name)
+            ref = url
+        else:
+            ref = file_name
+
+        # Append the information as a dictionary
+        result.append({
+            "ref": ref,
+            "label": label,
+            "snippet": snippet
+        })
 
     return result
 
