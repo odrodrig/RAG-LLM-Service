@@ -347,6 +347,9 @@ def extract_urls_or_filenames(data):
         
         # Check for label at node level first, then in metadata
         label = node.get("label") or node.get("metadata", {}).get("label")
+        # If it doesn't exist, use file_name
+        if not label:
+            label = file_name  
 
         # Extract 100-character snippet from the text field
         text = node.get("text", "")
@@ -362,7 +365,8 @@ def extract_urls_or_filenames(data):
         result.append({
             "ref": ref,
             "label": label,
-            "snippet": snippet
+            "snippet": snippet,
+            "text": text
         })
 
     return result
