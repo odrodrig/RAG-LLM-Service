@@ -320,7 +320,7 @@ async def queryLLM(request: queryLLMRequest, api_key: str = Security(get_api_key
     print(response)
     reference_data = [node.to_dict() for node in response.source_nodes]
     # Cull the list of references, return info for wxa carousel
-    ref_list = extract_urls_or_filenames(reference_data)
+    ref_list = build_curated_references(reference_data)
     print("References: ")
     print(ref_list)
 
@@ -332,7 +332,7 @@ async def queryLLM(request: queryLLMRequest, api_key: str = Security(get_api_key
 
     return queryLLMResponse(**data_response)
 
-def extract_urls_or_filenames(data):
+def build_curated_references(data):
 
     result = []
 
@@ -364,6 +364,8 @@ def extract_urls_or_filenames(data):
         # Append the information as a dictionary
         result.append({
             "ref": ref,
+            "url": url,
+            "file_name": file_name,
             "label": label,
             "snippet": snippet,
             "text": text
