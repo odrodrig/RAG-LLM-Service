@@ -314,10 +314,12 @@ async def queryLLM(request: queryLLMRequest, api_key: str = Security(get_api_key
                 "custom_query": create_sparse_vector_query_with_model(es_model_name, model_text_field=model_text_field)
             },
         )
+
     print(user_query)
     # Finally query the engine with the user question
     response = query_engine.query(user_query)
-    print(response)
+    print(response.response)
+
     reference_data = [node.to_dict() for node in response.source_nodes]
     # Cull the list of references, return info for wxa carousel
     ref_list = build_curated_references(reference_data)
@@ -360,6 +362,7 @@ def build_curated_references(data):
             ref = url
         else:
             ref = file_name
+            url = ''
 
         # Append the information as a dictionary
         result.append({
