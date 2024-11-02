@@ -368,7 +368,7 @@ def build_curated_references(data):
             ref = url
         else:
             ref = file_name
-            url = ''
+            url = ""
 
         # Append the information as a dictionary
         result.append({
