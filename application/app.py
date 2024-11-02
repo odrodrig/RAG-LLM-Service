@@ -337,12 +337,18 @@ async def queryLLM(request: queryLLMRequest, api_key: str = Security(get_api_key
 def build_curated_references(data):
 
     result = []
+    seen_urls = set()  # Set to track seen URLs
 
     for item in data:
         node = item.get("node", {})
         
         # Check for URL at node level first, then in metadata
         url = node.get("url") or node.get("metadata", {}).get("url")
+
+        # Skip adding this entry if the URL has already been seen
+        if url in seen_urls:
+            continue
+        seen_urls.add(url)  # Add URL to the set if not seen
         
         # Check for file_path at node level first, then in metadata
         file_name = node.get("file_name") or node.get("metadata", {}).get("file_name")
@@ -353,9 +359,9 @@ def build_curated_references(data):
         if not label:
             label = file_name  
 
-        # Extract 100-character snippet from the text field
+        # Save off the text chunk and possibly a snippet
         text = node.get("text", "")
-        snippet = ' '.join(text.split()[:20]) + "..."  # Get the first 20 words
+        #snippet = ' '.join(text.split()[:20]) + "..."  # Get the first 20 words
 
         # Append URL if it exists; otherwise, append the file_name if available
         if url:
@@ -370,7 +376,7 @@ def build_curated_references(data):
             "url": url,
             "file_name": file_name,
             "label": label,
-            "snippet": snippet,
+            #"snippet": snippet,
             "text": text
         })
 
