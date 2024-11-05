@@ -22,6 +22,7 @@ To run application on your local machine, follow these steps:
     python -m venv assetEnv
     source assetEnv/bin/activate
     python -m pip install -r requirements.txt
+    python prereqs.py
     ```
 
 4. Update your secrets:
@@ -33,7 +34,6 @@ To run application on your local machine, follow these steps:
 5. Start the project:
 
     ```bash
-    python prereqs.py
     python app.py
     ```
 
@@ -223,3 +223,13 @@ You can connect **watsonx Assistant** to invoke the `queryLLM` or `queryWDLLM` A
 
 - The `CustomWatsonX()` wrapper class used in this utility defines a default model to be used in the event that a model id isn't specified in the api call.  This code is located
 at [https://github.com/ibm-build-lab/RAG-LLM-Service/blob/main/application/utils.py:299](https://github.com/ibm-build-lab/RAG-LLM-Service/blob/main/application/utils.py:299). Ensure that the model defined in this class is available within the watsonx.ai framework. If the model defined here is deprecated from watsonx.ai, these apis will break. 
+
+## Contributing
+
+This utility is continually being enhanced, improved. To use this Open Source application, we highly recommend you follow these steps:
+1) Fork this repo, and work on your own fork. See [Fork a Repo](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/fork-a-repo)
+2) Set your upstream to be this repo. See [Configuring a remote repository for a fork](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/configuring-a-remote-repository-for-a-fork)
+3) Sync your fork/clone to this repository periodically before allowing your changes to diverge. See [Syncing a fork branch from the command line](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/syncing-a-fork#syncing-a-fork-branch-from-the-command-line)
+4) If you want to contribute your changes back to the utility, open a Pull request. See [Proposing changes with pull requests](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests)
+## License
+This code pattern is licensed under the MIT license.  Separate third party code objects invoked within this code pattern are licensed by their respective providers pursuant to their own separate licenses. 
