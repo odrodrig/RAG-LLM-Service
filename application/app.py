@@ -3,6 +3,8 @@ import os
 import uvicorn
 import sys
 import time
+from typing import List, Dict
+
 
 from utils import CloudObjectStorageReader, CustomWatsonX, create_sparse_vector_query_with_model, create_sparse_vector_query_with_model_and_filter
 from dotenv import load_dotenv
@@ -312,22 +314,73 @@ async def queryLLM(request: queryLLMRequest, api_key: str = Security(get_api_key
                 "custom_query": create_sparse_vector_query_with_model(es_model_name, model_text_field=model_text_field)
             },
         )
+
     print(user_query)
     # Finally query the engine with the user question
     response = query_engine.query(user_query)
-    print(response)
+    print(response.response)
+
+    reference_data = [node.to_dict() for node in response.source_nodes]
+    # Cull the list of references, return info for wxa carousel
+    ref_list = build_curated_references(reference_data)
+    print("References: ")
+    print(ref_list)
+
     data_response = {
         "llm_response": response.response,
-        "references": [node.to_dict() for node in response.source_nodes]
+        "references": reference_data,
+        "ref_list": ref_list
     }
 
     return queryLLMResponse(**data_response)
 
-    # except Exception as e:
-    #     return queryLLMResponse(
-    #         llm_response = "",
-    #         references=[{"error": repr(e)}]
-    #     )
+def build_curated_references(data):
+
+    result = []
+    seen_urls = set()  # Set to track seen URLs
+
+    for item in data:
+        node = item.get("node", {})
+        
+        # Check for URL at node level first, then in metadata
+        url = node.get("url") or node.get("metadata", {}).get("url")
+
+        # Skip adding this entry if the URL has already been seen
+        if url in seen_urls:
+            continue
+        seen_urls.add(url)  # Add URL to the set if not seen
+        
+        # Check for file_path at node level first, then in metadata
+        file_name = node.get("file_name") or node.get("metadata", {}).get("file_name")
+        
+        # Check for label at node level first, then in metadata
+        label = node.get("label") or node.get("metadata", {}).get("label")
+        # If it doesn't exist, use file_name
+        if not label:
+            label = file_name  
+
+        # Save off the text chunk and possibly a snippet
+        text = node.get("text", "")
+        #snippet = ' '.join(text.split()[:20]) + "..."  # Get the first 20 words
+
+        # Append URL if it exists; otherwise, append the file_name if available
+        if url:
+            ref = url
+        else:
+            ref = file_name
+            url = ""
+
+        # Append the information as a dictionary
+        result.append({
+            "ref": ref,
+            "url": url,
+            "file_name": file_name,
+            "label": label,
+            #"snippet": snippet,
+            "text": text
+        })
+
+    return result
 
 def get_custom_watsonx(model_id, additional_kwargs):
     # Serialize additional_kwargs to a JSON string, with sorted keys
