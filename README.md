@@ -34,7 +34,6 @@ To run application on your local machine, follow these steps:
 5. Start the project:
 
     ```bash
-    python prereqs.py # only needs to be done once
     python app.py
     ```
 
