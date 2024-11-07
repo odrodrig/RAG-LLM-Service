@@ -21,9 +21,8 @@ To run application on your local machine, follow these steps:
     ```bash
     python -m venv assetEnv
     source assetEnv/bin/activate
-    python -m pip install -r requirements.txt
-    python prereqs.py
     pip install -r requirements.txt
+    python prereqs.py
     ```
 
 4. Update your secrets:
