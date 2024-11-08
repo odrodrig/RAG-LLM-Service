@@ -16,3 +16,16 @@ Wait for the build to complete. To access the URL go into the **Applications** p
 
 A quick sanity check with `<url>/docs` will take you to the swagger ui. To try the APIs from swagger, you will need to click the **Authorize** button at the top and add the value you set for RAG-APP-API-KEY in the environment variables
 
+## How to see the logs from Code Engine containers
+
+If your RAG-LLM API calls produce an error, take a look at the container logs. The easiest way to see the logs from the application containers running on Code Engine is to use the `ibmcloud` command line interface. You will need to install the IBM Cloud CLI along with the Code Engine plugin.  See [IBM Cloud CLI](https://cloud.ibm.com/docs/cli?topic=cli-install-ibmcloud-cli) and [Code Engine CLI](https://cloud.ibm.com/containers/serverless/cli) :
+
+```
+ibmcloud login -sso
+ibmcloud plugin install code-engine
+ibmcloud target -g <resource group containing Code Engine project>
+ibmcloud ce project list
+ibmcloud ce project select -n <ce project name>
+ibmcloud ce app list
+ibmcloud ce application logs -f -n <ce app name>
+```
