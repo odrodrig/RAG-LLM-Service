@@ -12,7 +12,9 @@ To deploy manually, see [Deploy the RAG LLM Application into Code Engine step by
   
 ## Accessing the URL on Code Engine
 
-Wait for the build to complete. To access the URL go into the **Applications** page within the Code Engine Project, and click the **OpenURL** link next to the newly deployed `rag-app` application
+To get to **Code Engine** (now called **Serverless Containers**) open the menu on top left of IBM Cloud console, go to **Containers**->**Serverless**->**Projects**. Open the project running the RAG App.
+
+To access the URL go into the **Applications** page within the Code Engine Project, and click the **OpenURL** link next to the newly deployed `rag-app` application
 
 A quick sanity check with `<url>/docs` will take you to the swagger ui. To try the APIs from swagger, you will need to click the **Authorize** button at the top and add the value you set for RAG-APP-API-KEY in the environment variables
 
