@@ -25,7 +25,7 @@ If your RAG-LLM API calls produce an error, take a look at the container logs. T
 ```
 ibmcloud login -sso
 ibmcloud plugin install code-engine
-ibmcloud target -g <resource group containing Code Engine project>
+ibmcloud target -g <resource group containing Code Engine project> -r <region of Code Engine project>
 ibmcloud ce project list
 ibmcloud ce project select -n <ce project name>
 ibmcloud ce app list
