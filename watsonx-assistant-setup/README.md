@@ -78,8 +78,8 @@ Common variables for both APIs:
 - `model_response`: Response from LLM
 
 ### Additional Action Files
-If you want to include customer feedback logging and a references carousel, use the `RAG-App+logging+carousel-actions.json` action file. 
+If you want to include customer feedback logging and a references carousel, use the [RAG-App+logging+carousel-actions.json](./RAG-App+logging+carousel-actions.json) action file. 
 
-If you want to prompt LLM directly in addition to prompting RAG, the `RAG-App+LLM+logging+carousel-actions.json` action file contains actions that first prompt the LLM directly with additional user context, then prompts user to see if they also want information from ElasticSearch knowledge base, providing a carousel with resulting references.
+If you want to prompt LLM directly in addition to prompting RAG, the [RAG-App+LLM+logging+carousel-actions.json](./RAG-App+LLM+logging+carousel-actions.json) action file contains actions that first prompt the LLM directly with additional user context, then prompts user to see if they also want information from ElasticSearch knowledge base, providing a carousel with resulting references. For this action set to work, you will need to add the watsonx.ai extension as well as the RAG-LLM-Service extension before loading the actions.  See https://github.com/watson-developer-cloud/assistant-toolkit/tree/master/integrations/extensions/starter-kits/language-model-watsonx.
 
-To pull the resulting customer feedback from the logs, run the included [logging_script.py](./logging_script.py). For instructions on how to run it, see [Logging Script Instructions](./Logging.md).
+For each of these action files, you can pull the resulting customer feedback from the logs. To do so, run the included [logging_script.py](./logging_script.py). For instructions on how to run it, see [Logging Script Instructions](./Logging.md).
