@@ -26,8 +26,6 @@ This utility includes [a JSON file with sample actions](./rag-app-actions.json) 
 
 Use **Actions Global Settings** (see wheel icon top right of **Actions** page) to upload the `RAG-LLM-App-action.json` to your assistant. For more information, see [Uploading](https://cloud.ibm.com/docs/watson-assistant?topic=watson-assistant-admin-backup-restore#backup-restore-import). You may also need to refresh the action **Preview** chat, after uploading, to get all the session variables initialized before these actions will work correctly.
 
-If you want to include customer feedback logging and a references carousel, use the `RAG-App+logging+carousel-actions.json` action file instead. To see the resulting customer feedback, run the Logging Script included [here](./loggingScript.py). For instructions on how to run it, see [Logging Script Instructions](./Logging.md).
-
 Under **Variables->Created by you** within the **Actions** page, set the `es_index_name` session variable.
 
 **NOTE**: If you import the actions _before_ configuring the extension, you will see errors on the actions because it could not find the extension. Configure the extension (as described [above](#prerequisites)), and re-import the action JSON file.
@@ -78,3 +76,10 @@ Common variables for both APIs:
 - `model_parameters_top_p`: Similar to top_k except the candidates to generate the next token are the most likely tokens with probabilities that add up to at least top_p.
 - `num_results`: Maximum nmber of references to return from search and pass into LLM.
 - `model_response`: Response from LLM
+
+### Additional Action Files
+If you want to include customer feedback logging and a references carousel, use the `RAG-App+logging+carousel-actions.json` action file. 
+
+If you want to prompt LLM directly in addition to prompting RAG, the `RAG-App+LLM+logging+carousel-actions.json` action file contains actions that first prompt the LLM directly with additional user context, then prompts user to see if they also want information from ElasticSearch knowledge base, providing a carousel with resulting references.
+
+To pull the resulting customer feedback from the logs, run the included [logging_script.py](./logging_script.py). For instructions on how to run it, see [Logging Script Instructions](./Logging.md).
