@@ -3,7 +3,8 @@ After running a few tests and providing feedback on the generated answers, you c
 
 These feedback results will have the following information:
 - query - Query asked to the assistant for retrieval
-- llm_response - The response from the llm with the answer to user's query
+- llm_response - The response to user's query from the llm
+- rag_response - The response to user's query from the RAG pipeline
 - rating - The rating the user gave the generated answer
 - comments - Any feedback provided about the generated answer.
 
@@ -56,9 +57,10 @@ To use the script you will need:
 1. From your terminal, run the following command:
 
     ```
-    python loggingScript.py
+    python logging_script.py ----filter <date filter text>
     ```
-    
+    The `filter` argument is optional, defaults to "response_timestamp>2024-11-01T00:00:00.000Z" and should be in the format of `"response_timestamp>YYYY-MM-DDT00:00:00.000Z"` using the dates you want to include in the report. 
+   
     This will write a CSV file called `<date-time>_feedback.csv` to the same directory as the script. You can then review the feedback received from users in that file.
 
     
