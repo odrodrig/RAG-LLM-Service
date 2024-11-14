@@ -57,7 +57,7 @@ To use the script you will need:
 1. From your terminal, run the following command:
 
     ```
-    python logging_script.py ----filter <date filter text>
+    python logging_script.py --filter <date filter text>
     ```
     The `filter` argument is optional, defaults to "response_timestamp>2024-11-01T00:00:00.000Z" and should be in the format of `"response_timestamp>YYYY-MM-DDT00:00:00.000Z"` using the dates you want to include in the report. 
    
