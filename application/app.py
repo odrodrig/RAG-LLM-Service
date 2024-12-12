@@ -3,8 +3,6 @@ import os
 import uvicorn
 import sys
 import time
-from typing import List, Dict
-
 
 from utils import CloudObjectStorageReader, CustomWatsonX, create_sparse_vector_query_with_model, create_sparse_vector_query_with_model_and_filter
 from dotenv import load_dotenv
@@ -39,6 +37,14 @@ from customTypes.queryLLMRequest import queryLLMRequest
 from customTypes.queryLLMResponse import queryLLMResponse
 from customTypes.queryWDLLMRequest import queryWDLLMRequest
 from customTypes.queryWDLLMResponse import queryWDLLMResponse
+
+import logging
+import sys
+
+# Memory
+from langchain.memory import ConversationBufferMemory
+memory = ConversationBufferMemory()  # Initialize memory
+
 
 app = FastAPI()
 
@@ -305,6 +311,7 @@ async def queryLLM(request: queryLLMRequest, api_key: str = Security(get_api_key
                 "custom_query": create_sparse_vector_query_with_model_and_filter(es_model_name, model_text_field=model_text_field, filters=filters)
             },
         )
+
     else:
         query_engine = index.as_query_engine(
             text_qa_template=prompt_template,
@@ -315,74 +322,48 @@ async def queryLLM(request: queryLLMRequest, api_key: str = Security(get_api_key
             },
         )
 
+    
+    # Use `get_custom_prompt_with_memory` to create the prompt with memory
+    prompt = get_custom_prompt_with_memory(llm_instructions, user_query, memory)
+
+    # Generate the response using Watsonx.ai
+    #generated_response = Settings.llm.generate(prompt=prompt)
+    generated_response = query_engine.query(prompt)
+
+    # Update memory with the current interaction
+    memory.save_context({"input": question}, {"output": generated_response.response.strip()})
+
+    # Return the response
+    data_response_memory = {
+        "llm_response": generated_response.response,
+        "references": [node.to_dict() for node in generated_response.source_nodes]
+    }
+
+    print("*** Memory Respose ***")
+    #print(data_response_memory.llm_response)
+    print(generated_response)
+    
     print(user_query)
     # Finally query the engine with the user question
     response = query_engine.query(user_query)
-    print(response.response)
-
-    reference_data = [node.to_dict() for node in response.source_nodes]
-    # Cull the list of references, return info for wxa carousel
-    ref_list = build_curated_references(reference_data)
-    print("References: ")
-    print(ref_list)
-
+    print(response)
     data_response = {
         "llm_response": response.response,
-        "references": reference_data,
-        "ref_list": ref_list
+        "references": [node.to_dict() for node in response.source_nodes]
     }
 
     return queryLLMResponse(**data_response)
 
-def build_curated_references(data):
-
-    result = []
-    seen_urls = set()  # Set to track seen URLs
-
-    for item in data:
-        node = item.get("node", {})
-        
-        # Check for URL at node level first, then in metadata
-        url = node.get("url") or node.get("metadata", {}).get("url")
-
-        # Skip adding this entry if the URL has already been seen
-        if url in seen_urls:
-            continue
-        seen_urls.add(url)  # Add URL to the set if not seen
-        
-        # Check for file_path at node level first, then in metadata
-        file_name = node.get("file_name") or node.get("metadata", {}).get("file_name")
-        
-        # Check for label at node level first, then in metadata
-        label = node.get("label") or node.get("metadata", {}).get("label")
-        # If it doesn't exist, use file_name
-        if not label:
-            label = file_name  
-
-        # Save off the text chunk and possibly a snippet
-        text = node.get("text", "")
-        #snippet = ' '.join(text.split()[:20]) + "..."  # Get the first 20 words
-
-        # Append URL if it exists; otherwise, append the file_name if available
-        if url:
-            ref = url
-        else:
-            ref = file_name
-            url = ""
-
-        # Append the information as a dictionary
-        result.append({
-            "ref": ref,
-            "url": url,
-            "file_name": file_name,
-            "label": label,
-            #"snippet": snippet,
-            "text": text
-        })
-
-    return result
+    # except Exception as e:
+    #     return queryLLMResponse(
+    #         llm_response = "",
+    #         references=[{"error": repr(e)}]
+    #     )
 
 def get_custom_watsonx(model_id, additional_kwargs):
+
+    print("***** Model ID *****")
+    print(model_id)
     # Serialize additional_kwargs to a JSON string, with sorted keys
     additional_kwargs_str = json.dumps(additional_kwargs, sort_keys=True)
     # Generate a hash of the serialized string
@@ -404,6 +385,17 @@ def get_custom_watsonx(model_id, additional_kwargs):
     )
     custom_watsonx_cache[cache_key] = custom_watsonx
     return custom_watsonx
+
+def get_custom_prompt_with_memory(llm_instructions, query_str, memory):
+    # Retrieve chat history from memory
+    chat_history = memory.load_memory_variables({})
+
+    # Include the chat history in the prompt
+    prompt = (
+        f"Chat History:\n{chat_history.get('history')}\n\n"
+        f"User Query: {query_str}"
+    )
+    return prompt
 
 @app.post("/queryWDLLM")
 def queryWDLLM(request: queryWDLLMRequest, api_key: str = Security(get_api_key))->queryWDLLMResponse:
@@ -579,6 +571,8 @@ def queryWDLLM(request: queryWDLLMRequest, api_key: str = Security(get_api_key))
 
     generated_response = model.generate(prompt=prompt)
     response=generated_response['results'][0]['generated_text']
+    
+    print(generated_response)
 
     data_response = {
         "llm_response": response,
