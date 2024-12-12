@@ -40,6 +40,9 @@ from customTypes.queryLLMResponse import queryLLMResponse
 from customTypes.queryWDLLMRequest import queryWDLLMRequest
 from customTypes.queryWDLLMResponse import queryWDLLMResponse
 
+import requests
+import json
+
 app = FastAPI()
 
 # Set up CORS
@@ -61,6 +64,8 @@ api_key_header = APIKeyHeader(name=API_KEY_NAME, auto_error=False)
 #Token to IBM Cloud
 ibm_cloud_api_key = os.environ.get("IBM_CLOUD_API_KEY")
 project_id = os.environ.get("WX_PROJECT_ID")
+os.environ["WATSONX_APIKEY"] = ibm_cloud_api_key
+
 
 # wxd creds
 wxd_creds = {
@@ -297,39 +302,136 @@ async def queryLLM(request: queryLLMRequest, api_key: str = Security(get_api_key
             ]
         )
         
-        query_engine = index.as_query_engine(
-            text_qa_template=prompt_template,
-            similarity_top_k=num_results,
-            vector_store_query_mode="sparse",
-            vector_store_kwargs={
-                "custom_query": create_sparse_vector_query_with_model_and_filter(es_model_name, model_text_field=model_text_field, filters=filters)
-            },
-        )
-    else:
-        query_engine = index.as_query_engine(
-            text_qa_template=prompt_template,
-            similarity_top_k=num_results,
-            vector_store_query_mode="sparse",
-            vector_store_kwargs={
-                "custom_query": create_sparse_vector_query_with_model(es_model_name, model_text_field=model_text_field)
-            },
-        )
+        # query_engine = index.as_query_engine(
+        #     text_qa_template=prompt_template,
+        #     similarity_top_k=num_results,
+        #     vector_store_query_mode="sparse",
+        #     vector_store_kwargs={
+        #         "custom_query": create_sparse_vector_query_with_model_and_filter(es_model_name, model_text_field=model_text_field, filters=filters)
+        #     },
+        # )
 
+        # query_engine = index.as_query_engine(
+        #     text_qa_template=prompt_template,
+        #     similarity_top_k=num_results,
+        #     vector_store_kwargs={
+        #         "custom_query": create_dense_vector_query_with_model_and_filter(es_model_name, model_text_field=model_text_field, filters=filters)
+        #     },
+        # )
+
+        url = wxd_creds["wxdurl"]+"/"+index_name+"/_search"
+
+        headers = {
+            "kbn-xsrf": "reporting",
+            "Content-Type": "application/json"
+        }
+
+        data = {
+            "_source": False,
+            "fields": [
+                "body_content",
+                "metadata.file_path",
+                "metadata.title"
+            ],
+            "knn": {
+                "field": "ml.predicted_value",
+                "k": 5,
+                "num_candidates": 100,
+                "query_vector_builder": {
+                    "text_embedding": {
+                        "model_id": ".multilingual-e5-small_linux-x86_64",
+                        "model_text": user_query
+                    }
+                },
+                "filter": {
+                    "term": es_filters
+                }   
+            }
+        }
+
+        response = requests.get(url, headers=headers, data=json.dumps(data), verify=False, auth=(wxd_creds["username"], wxd_creds["password"]))
+
+    else:
+        # query_engine = index.as_query_engine(
+        #     text_qa_template=prompt_template,
+        #     similarity_top_k=num_results,
+        #     vector_store_query_mode="sparse",
+        #     vector_store_kwargs={
+        #         "custom_query": create_sparse_vector_query_with_model(es_model_name, model_text_field=model_text_field)
+        #     },
+        # )
+
+        # Perform a KNN search
+
+        url = wxd_creds["wxdurl"]+"/"+index_name+"/_search"
+
+        headers = {
+            "kbn-xsrf": "reporting",
+            "Content-Type": "application/json"
+        }
+
+        data = {
+            "_source": True,
+            "fields": [
+                "body_content",
+                "metadata.file_path",
+                "metadata.title"
+            ],
+            "knn": {
+                "field": "ml.predicted_value",
+                "k": 5,
+                "num_candidates": 100,
+                "query_vector_builder": {
+                    "text_embedding": {
+                        "model_id": ".multilingual-e5-small_linux-x86_64",
+                        "model_text": user_query
+                    }
+                }
+            }
+        }
+
+        response = requests.get(url, headers=headers, data=json.dumps(data), verify=False, auth=(wxd_creds["username"], wxd_creds["password"]))
+
+
+    # watsonx_llm = WatsonxLLM(
+    #     model_id="ibm/granite-13b-instruct-v2",
+    #     url="https://us-south.ml.cloud.ibm.com",
+    #     project_id=project_id,
+    #     temperature=llm_params["temperature"],
+    #     max_new_tokens=llm_params["max_new_tokens"],
+    #     decoding_method=llm_params["decoding_method"]
+    # )
+
+    print(response.json())
+    hits = response.json()['hits']['hits']
+    print(hits)
+    contexts = []
+    for hit in hits:
+        text = {
+            "body_content": hit["fields"]["body_content"],
+            "title": hit["fields"]["metadata.title"],
+            "file_path": hit["fields"]["metadata.file_path"]
+        }
+        contexts.append(text)
+    
+    # Print the results
     print(user_query)
     # Finally query the engine with the user question
-    response = query_engine.query(user_query)
-    print(response.response)
 
-    reference_data = [node.to_dict() for node in response.source_nodes]
-    # Cull the list of references, return info for wxa carousel
-    ref_list = build_curated_references(reference_data)
+    prompt = prompt_template.format(context_str=contexts, query_str=user_query)
+    response = str(Settings.llm.complete(prompt))
+    print(response)
+
+    # reference_data = [node.to_dict() for node in response.source_nodes]
+    # # Cull the list of references, return info for wxa carousel
+    # ref_list = build_curated_references(reference_data)
     print("References: ")
-    print(ref_list)
+    print(contexts)
 
     data_response = {
-        "llm_response": response.response,
-        "references": reference_data,
-        "ref_list": ref_list
+        "llm_response": response,
+        "references": contexts,
+        "ref_list": []
     }
 
     return queryLLMResponse(**data_response)
